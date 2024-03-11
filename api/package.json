@@ -1,0 +1,38 @@
+{
+  "name": "@bravio/api",
+  "version": "0.1.0",
+  "license": "GPL-3.0-or-later",
+  "description": "Bravio API for account creation, deposit, withdrawal, etc",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "ts-node-dev -r ./src/server/tracing.ts src/server/server.ts",
+    "start": "node --max-old-space-size=7168 -- ../node_modules/.bin/ts-node -r ./src/server/server.ts",
+    "test": "tsc --noEmit && tape -r ts-node/register/transpile-only test/**/*.test.ts",
+    "lint": "npm run lint:deps && npm run lint:style",
+    "lint:deps": "npx depcheck --ignores @tsconfig/node20,@types/tape,ts-node",
+    "lint:style": "eslint . --max-warnings=0"
+  },
+  "repository": "https://github.com/sourdzl/bravio.git",
+  "dependencies": {
+    "@coinbase/cbpay-js": "^1.8.0",
+    "@trpc/server": "^10.43.2",
+    "@types/cors": "^2.8.16",
+    "await-lock": "^2.2.2",
+    "cors": "^2.8.5",
+    "cron": "^3.1.4",
+    "expo-server-sdk": "^3.7.0",
+    "semver": "^7.6.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.0",
+    "@types/semver": "^7.5.8",
+    "@types/tape": "^5.6.0",
+    "depcheck": "^1.4.3",
+    "eslint": "^8.44.0",
+    "tape": "^5.6.3",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "5.2.2"
+  }
+}
