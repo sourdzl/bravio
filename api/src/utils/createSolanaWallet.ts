@@ -42,19 +42,18 @@ export async function _sendSOL(fromKeypair: Keypair, toKeypair: Keypair) {
 export async function generateKeyPair (userId: string) {
     
   const keypair = Keypair.generate();
-  console.log(wallet);
 
   // register this keypair for the user for the DB.  Put secretkey somewhere else?
   sql`
   INSERT INTO wallets (user_id, public_key, secret_key)
-  VALUES (${userId}, ${keypair.publicKey()}, ${keypair.secretKey()})
-  `
-  
+  VALUES (${userId}, ${keypair.publicKey}, ${keypair.secretKey})
+  `;
 
-  wallet = {
-    publicKey: keypair.publicKey(),
-    secretKey: keypair.secretKey(),
+  const wallet = {
+    publicKey: keypair.publicKey,
+    secretKey: keypair.secretKey,
   }
+  console.log(wallet);
   return wallet;
 
 }
