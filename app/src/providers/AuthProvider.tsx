@@ -1,12 +1,13 @@
-import { supabase } from '@/lib/supabase';
-import { Session } from '@supabase/supabase-js';
+import { Profile } from "@/database.types";
+import { supabase } from "@/lib/supabase";
+import { Session } from "@supabase/supabase-js";
 import {
   PropsWithChildren,
   createContext,
   useContext,
   useEffect,
   useState,
-} from 'react';
+} from "react";
 
 type AuthData = {
   session: Session | null;
@@ -22,30 +23,30 @@ const AuthContext = createContext<AuthData>({
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchSession = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    setSession(session);
+
+    if (session) {
+      // fetch profile
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single<Profile>();
+      setProfile(data);
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      setSession(session);
-
-      if (session) {
-        // fetch profile
-        const { data } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        setProfile(data || null);
-      }
-
-      setLoading(false);
-    };
-
     fetchSession();
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -53,9 +54,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ session, loading, profile, }}
-    >
+    <AuthContext.Provider value={{ session, loading, profile }}>
       {children}
     </AuthContext.Provider>
   );

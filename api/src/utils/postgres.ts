@@ -32,7 +32,7 @@ const sql = postgres(connectionString);
 //   ssl: { rejectUnauthorized: true, cert: _sslcert },
 // });
 
-export async function getBalance(userId) {
+export async function getBalance(userId: string) {
   const balances = await sql`
     select *
     from balances
@@ -40,5 +40,7 @@ export async function getBalance(userId) {
   `;
   return balances;
 }
+
+export async function getUsers() {}
 
 export default sql;

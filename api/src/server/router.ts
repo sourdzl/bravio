@@ -6,10 +6,7 @@ import { getUsers } from "../utils/postgres";
 import { PushNotifier } from "./pushNotifier";
 import { trpcT } from "./trpc";
 
-export function createRouter(
-  notifier: PushNotifier,
-) {
-
+export function createRouter(notifier: PushNotifier) {
   const corsMiddleware = trpcT.middleware(async (opts) => {
     opts.ctx.res.setHeader("Access-Control-Allow-Origin", "*");
     return opts.next();
@@ -41,9 +38,9 @@ export function createRouter(
         })
       )
       .query(async (opts) => {
-        return 
+        return;
         // getAccountHistory(
-          opts;
+        opts;
         // );
       }),
 
@@ -72,10 +69,11 @@ export function createRouter(
       return { fakemessage: await getUsers() };
     }),
 
-    createSolanaWallet: publicProcedure.query(async (opts)=>{
+    createSolanaWallet: publicProcedure.query(async (opts) => {
+      // @ts-ignore to fix later
       const { user } = opts.input;
       const wallet = await generateKeyPair(user);
       return wallet;
-    })
+    }),
   });
 }
