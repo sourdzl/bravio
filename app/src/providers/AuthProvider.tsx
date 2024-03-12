@@ -41,6 +41,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
           .eq('id', session.user.id)
           .single();
         setProfile(data || null);
+        console.log(`profile set as ${data}`);
       }
 
       setLoading(false);
@@ -54,7 +55,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
   return (
     <AuthContext.Provider
-      value={{ session, loading, profile, }}
+      value={{ session, loading, profile }}
     >
       {children}
     </AuthContext.Provider>

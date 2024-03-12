@@ -32,9 +32,9 @@ export default function TabLayout() {
       <Tabs.Screen name="index" options={{ href: null }} />
 
       <Tabs.Screen
-        name="asset"
+        name="portfolio"
         options={{
-          title: 'Assets',
+          title: 'Portfolio',
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="cutlery" color={color} />

@@ -23,7 +23,7 @@ export default function AssetStack() {
         ),
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'Asset' }} />
+      <Stack.Screen name="index" options={{ title: 'Portfolio' }} />
     </Stack>
   );
 }
