@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();  // Load environment variables from .env file 
+
 import { createHTTPHandler } from "@trpc/server/adapters/standalone";
 import cors from "cors";
 import http from "http";

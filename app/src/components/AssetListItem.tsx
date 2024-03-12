@@ -24,7 +24,7 @@ const AssetListItem = ({ asset }: AssetListItemProps) => {
           resizeMode="contain"
         />
 
-        <Text style={styles.title}>{asset.name}</Text>
+        <Text style={styles.title}>{asset.name} (${asset.price})</Text>
         <Text style={styles.price}>${asset.price}</Text>
       </Pressable>
     </Link>
@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 10,
     flex: 1,
-    maxWidth: '50%',
+    maxWidth: '100%',
   },
 
   image: {
@@ -51,9 +51,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginVertical: 10,
+    alignSelf: 'flex-end',
   },
   price: {
     color: Colors.light.tint,
     fontWeight: 'bold',
+    alignSelf: 'flex-end',
+    alignItems: 'center' 
   },
 });

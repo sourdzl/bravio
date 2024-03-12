@@ -1,5 +1,4 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { stripe } from './stripe.ts';
 
 export const createOrRetrieveProfile = async (req: Request) => {
   const supabaseClient = createClient(
@@ -28,20 +27,5 @@ export const createOrRetrieveProfile = async (req: Request) => {
   }
 
   console.log(profile);
-  if (profile.stripe_customer_id) {
-    return profile.stripe_customer_id;
-  }
-
-  // Create a Stripe customer
-  const customer = await stripe.customers.create({
-    email: user.email,
-    metadata: { uid: user.id },
-  });
-
-  await supabaseClient
-    .from('profiles')
-    .update({ stripe_customer_id: customer.id })
-    .eq('id', profile.id);
-
-  return customer.id;
+  return profile;
 };

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FoodOrdering",
-    "slug": "FoodOrdering",
+    "name": "Bravio",
+    "slug": "Bracio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -17,14 +17,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sourdzl.FoodOrdering"
+      "bundleIdentifier": "com.sourdzl.Bravio"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sourdzl.FoodOrdering"
+      "package": "com.sourdzl.Bravio"
     },
     "web": {
       "bundler": "metro",

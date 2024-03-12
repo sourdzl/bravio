@@ -81,7 +81,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.sourdzl.FoodOrdering'
+    namespace 'com.sourdzl.Ordering'
     defaultConfig {
         applicationId 'com.sourdzl.FoodOrdering'
         minSdkVersion rootProject.ext.minSdkVersion

@@ -32,3 +32,18 @@ export const useAsset = (id: number) => {
     },
   });
 };
+
+
+export const useBalanceList = (user_id: number) => {
+  return useQuery({
+    queryKey: ['balances', user_id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('balances').select('quantity').eq('user_id', user_id);
+      if (error) {
+        throw new Error(error.message);
+      }
+      console.log(data);
+      return data;
+    },
+  });
+};

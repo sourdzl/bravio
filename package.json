@@ -22,11 +22,14 @@
     "typescript": "5.2.2"
   },
   "workspaces": [
-    "api/",
+    "api/*",
     "app/*"
   ],
   "engines": {
     "node": ">=20.3.0",
     "npm": ">=9.6.7"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
   }
 }
