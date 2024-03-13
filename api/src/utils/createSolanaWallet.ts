@@ -1,21 +1,26 @@
+import * as splToken from "@solana/spl-token";
 import {
     Connection,
     Keypair,
     LAMPORTS_PER_SOL,
-    SystemProgram,
-    Transaction,
+    PublicKey,
     sendAndConfirmTransaction,
+    Transaction,
 } from "@solana/web3.js";
+
 import * as sql from './postgres';
-
-const LAMPORTS_PER_WALLET = LAMPORTS_PER_SOL / 100; // 0.01 SOL
-
-export async function _getTestnetSol(wallet: Keypair){
   const connection = new Connection(
     "https://api.devnet.solana.com",
     "confirmed"
   );
 
+
+
+const LAMPORTS_PER_WALLET = LAMPORTS_PER_SOL / 100; // 0.01 SOL
+const USDC_SPL_PUBKEY = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'; // on solana mainnet
+const USDC_pubkey = new PublicKey(USDC_SPL_PUBKEY);
+
+export async function _getTestnetSol(wallet: Keypair){
   const airdropSignature = await connection.requestAirdrop(
     wallet.publicKey,
     LAMPORTS_PER_SOL
@@ -25,17 +30,41 @@ export async function _getTestnetSol(wallet: Keypair){
   await connection.confirmTransaction(airdropSignature);
 }
 
-export async function _sendSOL(fromKeypair: Keypair, toKeypair: Keypair) {
-  const transferTransaction = new Transaction().add(
-    SystemProgram.transfer({
-      fromPubkey: fromKeypair.publicKey,
-      toPubkey: toKeypair.publicKey,
-      lamports: LAMPORTS_PER_WALLET,
-    })
+export async function _sweepUSDC(fromWallet: Keypair, toWallet: Keypair) {
+    const USDC_Token = new splToken.Token(
+    connection,
+    USDC_pubkey,
+    splToken.TOKEN_PROGRAM_ID,
+    fromWallet
   );
+    const [fromTokenAccount, toTokenAccount] = await Promise.all([
+    USDC_Token.getOrCreateAssociatedAccountInfo(fromWallet.publicKey),
+        USDC_Token.getOrCreateAssociatedAccountInfo(
+            toWallet.publicKey
+        )]);
+
+  const transferTransaction = new Transaction().add(
+      splToken.Token.createTransferInstruction(
+        splToken.TOKEN_PROGRAM_ID,
+        fromTokenAccount.address,
+        toTokenAccount.address,
+        fromWallet.publicKey,
+        [],
+        0
+      ).sign([fromWallet])
+    );
+
+  // sending SOL is much simpler
+//   const transferTransaction = new Transaction().add(
+//     SystemProgram.transfer({
+//       fromPubkey: fromKeypair.publicKey,
+//       toPubkey: toKeypair.publicKey,
+//       lamports: LAMPORTS_PER_WALLET,
+//     })
+//   );
 
   return await sendAndConfirmTransaction(connection, transferTransaction, [
-    fromKeypair,
+    toKeyPair, // the receiving wallet can pay for everything
   ]);
 }
 
