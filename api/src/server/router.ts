@@ -1,10 +1,10 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { generateKeyPair } from "../utils/createSolanaWallet";
-import { getBalance } from "../utils/postgres";
-import { PushNotifier } from "./pushNotifier";
-import { trpcT } from "./trpc";
+import { generateKeyPair } from "../utils/createSolanaWallet.js";
+import { getBalance } from "../utils/postgres.js";
+import { PushNotifier } from "./pushNotifier.js";
+import { trpcT } from "./trpc.js";
 
 export function createRouter(notifier: PushNotifier) {
   const corsMiddleware = trpcT.middleware(async (opts) => {

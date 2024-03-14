@@ -1,5 +1,6 @@
 import postgres from "postgres";
 
+// TODO: validate the supabase connection to help prevent MITM attacks
 const _sslcert = `-----BEGIN CERTIFICATE-----
 MIIDxDCCAqygAwIBAgIUbLxMod62P2ktCiAkxnKJwtE9VPYwDQYJKoZIhvcNAQEL
 BQAwazELMAkGA1UEBhMCVVMxEDAOBgNVBAgMB0RlbHdhcmUxEzARBgNVBAcMCk5l
@@ -27,7 +28,7 @@ o/bKiIz+Fq8=
 
 const connectionString = process.env.DATABASE_URL || "not found";
 console.log(connectionString);
-const sql = postgres(connectionString);
+const sql: postgres.Sql = postgres(connectionString);
 // const sql = postgres(connectionString, {
 //   ssl: { rejectUnauthorized: true, cert: _sslcert },
 // });

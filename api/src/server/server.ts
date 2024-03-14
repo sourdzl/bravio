@@ -1,14 +1,15 @@
-import dotenv from 'dotenv';
-dotenv.config();  // Load environment variables from .env file 
-
 import { createHTTPHandler } from "@trpc/server/adapters/standalone";
 import cors from "cors";
+import dotenv from "dotenv";
 import http from "http";
 
-import { Crontab } from "./cron";
-import { PushNotifier } from "./pushNotifier";
-import { createRouter } from "./router";
-import { createContext, onTrpcError } from "./trpc";
+import { Crontab } from "./cron.js";
+import { PushNotifier } from "./pushNotifier.js";
+import { createRouter } from "./router.js";
+import { createContext, onTrpcError } from "./trpc.js";
+// wtf is .js needed?
+
+dotenv.config(); // Load environment variables from .env file
 
 async function main() {
   // await db.createTables();
@@ -16,8 +17,7 @@ async function main() {
   const accountFactory = null; //new AccountFactory();
   const crontab = new Crontab();
 
-  const notifier = new PushNotifier(
-  );
+  const notifier = new PushNotifier();
 
   // Initialize in background
   (async () => {
@@ -26,9 +26,7 @@ async function main() {
   })();
 
   console.log(`[API] serving...`);
-  const router = createRouter(
-    notifier,
-  );
+  const router = createRouter(notifier);
   const handler = createHTTPHandler({
     middleware: cors(),
     router,
