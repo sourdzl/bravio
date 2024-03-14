@@ -6,10 +6,7 @@ import { getBalance } from "../utils/postgres";
 import { PushNotifier } from "./pushNotifier";
 import { trpcT } from "./trpc";
 
-export function createRouter(
-  notifier: PushNotifier,
-) {
-
+export function createRouter(notifier: PushNotifier) {
   const corsMiddleware = trpcT.middleware(async (opts) => {
     opts.ctx.res.setHeader("Access-Control-Allow-Origin", "*");
     return opts.next();
@@ -41,9 +38,9 @@ export function createRouter(
         })
       )
       .query(async (opts) => {
-        return 
+        return;
         // getAccountHistory(
-          opts;
+        opts;
         // );
       }),
 
@@ -69,17 +66,17 @@ export function createRouter(
     }),
 
     dbQuery: publicProcedure
-      .input(z.object({user: z.string()}))
+      .input(z.object({ user: z.string() }))
       .query(async (opts) => {
-      return { fakemessage: await getBalance(opts.input.user) };
-    }),
+        return { fakemessage: await getBalance(opts.input.user) };
+      }),
 
     createSolanaWallet: publicProcedure
-      .input(z.object({user: z.string()}))
-      .query(async (opts)=>{
-      const { user } = opts.input;
-      const wallet = await generateKeyPair(user);
-      return wallet;
-    })
+      .input(z.object({ user: z.string() }))
+      .query(async (opts) => {
+        const { user } = opts.input;
+        const wallet = await generateKeyPair(user);
+        return wallet;
+      }),
   });
 }
