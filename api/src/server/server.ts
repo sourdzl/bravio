@@ -1,6 +1,5 @@
 import { createHTTPHandler } from "@trpc/server/adapters/standalone";
 import cors from "cors";
-import dotenv from "dotenv";
 import http from "http";
 
 import { Crontab } from "./cron.js";
@@ -8,8 +7,6 @@ import { PushNotifier } from "./pushNotifier.js";
 import { createRouter } from "./router.js";
 import { createContext, onTrpcError } from "./trpc.js";
 // wtf is .js needed?
-
-dotenv.config(); // Load environment variables from .env file
 
 async function main() {
   // await db.createTables();

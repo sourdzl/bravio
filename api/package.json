@@ -6,7 +6,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev -r ./src/server/tracing.ts src/server/server.ts",
-    "start": "node --max-old-space-size=7168 -- ../node_modules/.bin/ts-node -r ./src/server/server.ts",
+    "start": "node --loader ts-node/esm --max-old-space-size=7168 -r dotenv/config ./src/server/server.ts",
     "test": "tsc --noEmit && tape -r ts-node/register/transpile-only test/**/*.test.ts",
     "lint": "npm run lint:deps && npm run lint:style",
     "lint:deps": "npx depcheck --ignores @tsconfig/node20,@types/tape,ts-node",
