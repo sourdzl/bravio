@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { generateKeyPair } from "../utils/createSolanaWallet";
-import { getUsers } from "../utils/postgres";
+import { getBalance } from "../utils/postgres";
 import { PushNotifier } from "./pushNotifier";
 import { trpcT } from "./trpc";
 
@@ -65,15 +65,18 @@ export function createRouter(notifier: PushNotifier) {
       return { message: "This is a simple GET response" };
     }),
 
-    dbQuery: publicProcedure.query(async () => {
-      return { fakemessage: await getUsers() };
-    }),
+    dbQuery: publicProcedure
+      .input(z.object({ user: z.string() }))
+      .query(async (opts) => {
+        return { fakemessage: await getBalance(opts.input.user) };
+      }),
 
-    createSolanaWallet: publicProcedure.query(async (opts) => {
-      // @ts-ignore to fix later
-      const { user } = opts.input;
-      const wallet = await generateKeyPair(user);
-      return wallet;
-    }),
+    createSolanaWallet: publicProcedure
+      .input(z.object({ user: z.string() }))
+      .query(async (opts) => {
+        const { user } = opts.input;
+        const wallet = await generateKeyPair(user);
+        return wallet;
+      }),
   });
 }

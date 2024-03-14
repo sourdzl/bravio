@@ -1,18 +1,16 @@
-import { useAssetList, useBalanceList } from '@/api/assets';
+import { useAssetList } from '@/api/assets';
 import AssetListItem from '@/components/AssetListItem';
-import { supabase } from '@/lib/supabase';
 import { ActivityIndicator, FlatList, Text } from 'react-native';
 
 export default function AssetScreen() {
   const { data: assets, error, isLoading } = useAssetList();
-  const { data: balances, _error, _isLoading } = useBalanceList(supabase.auth.getUser().id);
 
   if (isLoading) {
     return <ActivityIndicator />;
   }
 
   if (error) {
-    return <Text>Failed to fetch products</Text>;
+    return <Text>Failed to fetch assets</Text>;
   }
 
   return (

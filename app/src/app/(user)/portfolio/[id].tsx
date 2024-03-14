@@ -1,11 +1,11 @@
-import { useAsset } from '@/api/assets';
-import { defaultPizzaImage } from '@/components/AssetListItem';
+import { useAsset, useBalanceList } from '@/api/assets';
+import { imageUSD } from '@/components/AssetListItem';
 import RemoteImage from '@/components/RemoteImage';
+import { useAuth } from '@/providers/AuthProvider';
 import Button from '@components/Button';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   ActivityIndicator,
-  Pressable,
   StyleSheet,
   Text,
   View
@@ -19,62 +19,48 @@ function viewAsset() {
 const AssetDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
   const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
+  const { session, authLoading } = useAuth();
+
   const { data: asset, error, isLoading } = useAsset(id);
+  console.log(`user session: ${JSON.stringify(session)} asset_id: ${id}`);
+  const { data: balances, _error, _isLoading } = useBalanceList(session.user.id);
+  console.log(`balances: ${JSON.stringify(balances)} id: ${id}`);
 
 
   const router = useRouter();
 
-  if (isLoading) {
+  if (isLoading | authLoading) {
     return <ActivityIndicator />;
   }
 
-  if (error) {
-    return <Text>Failed to fetch assets</Text>;
+  if (error || !balances) {
+    return <Text>Failed to fetch assets: error {error?.message} balances {JSON.stringify(balances)}</Text>;
   }
 
-  console.log(asset);
+  // move this horrible matching logic to helper function
+  let assetBalance = null;
+  for (const _assetBalance of balances){
+    if (_assetBalance.assets.id === id) {
+      assetBalance = _assetBalance.quantity;
+    }
+  }
 
+  console.log(`assetBalance: ${assetBalance}`);
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: asset.name }} />
 
       <RemoteImage
         path={asset?.image}
-        fallback={defaultPizzaImage}
+        fallback={imageUSD}
         style={styles.image}
       />
 
-      <Text>Select size</Text>
-      <View style={styles.sizes}>
-        {actions.map((action) => (
-          <Pressable
-            onPress={() => {
-              console.log(action);
-            }}
-            style={[
-              styles.size,
-              {
-                backgroundColor: action === 'DEPOSIT' ? 'gainsboro' : 'white',
-              },
-            ]}
-            key={action}
-          >
-            <Text
-              style={[
-                styles.sizeText,
-                {
-                  color: 'DEPOSIT' === action ? 'black' : 'gray',
-                },
-              ]}
-            >
-              {action}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
+      <Text style={styles.price}>Holdings: {assetBalance}</Text>
       <Text style={styles.price}>${asset.price}</Text>
-      <Button onPress={viewAsset} text="view Asset" />
+      <Button style={styles.button} onPress={viewAsset} text="Deposit" />
+      <Button onPress={viewAsset} text="Withdraw" />
+      <Button onPress={viewAsset} text="Send" />
     </View>
   );
 };
@@ -82,10 +68,11 @@ const AssetDetailsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    flex: 1,
+    flex: 0,
     padding: 10,
   },
   image: {
+    maxHeight: 80,
     width: '100%',
     aspectRatio: 1,
   },
@@ -100,11 +87,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginVertical: 10,
   },
-  size: {
+  button: {
     backgroundColor: 'gainsboro',
-    width: 50,
+    maxWidth: 10,
     aspectRatio: 1,
-    borderRadius: 25,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
