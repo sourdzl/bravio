@@ -1,19 +1,21 @@
 // config/env.js
 const environments = {
   development: {
-    serverUrl: 'http://localhost:3000',
+    serverUrl: "http://localhost:3000",
   },
-  staging: {
-    serverUrl: 'https://your-staging-server.com',
+  test: {
+    serverUrl: "https://your-staging-server.com",
   },
   production: {
-    serverUrl: 'https://your-production-server.com',
+    serverUrl: "https://your-production-server.com",
   },
 };
 
 const getEnv = (): string => {
-  const env = process.env.NODE_ENV || 'development';
-  return environments[env] || environments.development;
+  const env = process.env.NODE_ENV || "development";
+  return (
+    environments[env]["serverUrl"] || environments.development["serverUrl"]
+  );
 };
 
 export default getEnv;

@@ -11,7 +11,7 @@ import { createContext, onTrpcError } from "./trpc.js";
 async function main() {
   // await db.createTables();
 
-  const accountFactory = null; //new AccountFactory();
+  // const accountFactory = null; //new AccountFactory();
   const crontab = new Crontab();
 
   const notifier = new PushNotifier();
@@ -34,6 +34,7 @@ async function main() {
   const trpcPrefix = `/chain/solana/`;
   const server = http.createServer((req, res) => {
     // Only serve requests for the correct network.
+    // i dunno if this is actually needed right now, since we'll only support Solana at first
     if (req.url == null || !req.url.startsWith(trpcPrefix)) {
       console.log(`[API] SKIPPING ${req.url}`);
       res.writeHead(404);
