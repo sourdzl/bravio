@@ -1,9 +1,9 @@
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/providers/AuthProvider';
-import { Link, Redirect } from 'expo-router';
-import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import Button from '../components/Button';
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/providers/AuthProvider";
+import { Link, Redirect } from "expo-router";
+import React from "react";
+import { ActivityIndicator, View } from "react-native";
+import Button from "../components/Button";
 
 const index = () => {
   const { session, loading } = useAuth();
@@ -13,14 +13,14 @@ const index = () => {
   }
 
   if (!session) {
-    return <Redirect href={'/sign-in'} />;
+    return <Redirect href={"/sign-in"} />;
   }
 
-  return <Redirect href={'/(user)'} />;
+  return <Redirect href={"/(user)/profile"} />;
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
-      <Link href={'/(user)'} asChild>
+    <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>
+      <Link href={"/(user)"} asChild>
         <Button text="User" />
       </Link>
 
