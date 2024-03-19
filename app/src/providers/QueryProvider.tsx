@@ -1,25 +1,25 @@
-import getEnv from '@/config/env';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { PropsWithChildren } from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { PropsWithChildren } from "react";
+
+import getEnv from "config/env";
 
 const client = new QueryClient();
 
-const { serverUrl } = getEnv();
-
+const serverUrl = getEnv();
 
 async function fetchData() {
   try {
     const response = await fetch(`${serverUrl}/protected`, {
-      credentials: 'include',
+      credentials: "include",
       headers: {
-        'Cookie': `access-token=${session.access_token}`,
+        Cookie: `access-token=${session.access_token}`,
       },
     });
 
     // Handle the response
     console.log(await response.json());
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
 }
 

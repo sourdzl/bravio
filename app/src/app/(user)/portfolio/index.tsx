@@ -1,6 +1,6 @@
-import { useAssetList } from '@/api/assets';
-import AssetListItem from '@/components/AssetListItem';
-import { ActivityIndicator, FlatList, Text } from 'react-native';
+import { useAssetList } from "api/assets";
+import AssetListItem from "components/AssetListItem";
+import { ActivityIndicator, FlatList, Text } from "react-native";
 
 export default function AssetScreen() {
   const { data: assets, error, isLoading } = useAssetList();

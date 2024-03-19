@@ -1,46 +1,53 @@
-import React from "react";
+import { Redirect } from "expo-router";
+import React, { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
-import { useCreateSolanaWallet } from "@/api/orders";
-import { useAuth } from "@/providers/AuthProvider";
-import { Redirect } from "expo-router";
 import Colors from "../constants/Colors";
 import { ExternalLink } from "./ExternalLink";
 import { MonoText } from "./StyledText";
 import { Text, View } from "./Themed";
 
+import { useCreateSolanaWallet } from "../api/orders";
+import { useAuth } from "../providers/AuthProvider";
+
 export default function Deposit({ path }: { path: string }) {
   // example of an auth context consumer
   const { session, loading, profile } = useAuth();
-  const { mutateAsync: createSolana } = useCreateSolanaWallet();
+  const { mutateAsync: _createSolanaWallet } = useCreateSolanaWallet();
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
   if (!session) {
     // doesnt feel right doing this everywhere
     return <Redirect href="/" />;
   }
 
-
   async function createSolanaWallet() {
-    await createSolana(
-      { userId: session?.user.id ?? "" },
-      {
-        onSuccess: (data) => {
-          // store result
-        },
-      }
-    );
+    try {
+      await _createSolanaWallet(
+        { userId: session?.user.id ?? "" },
+        {
+          onSuccess: (data) => {
+            setResponse(data);
+            // store result
+          },
+        }
+      );
+    } catch (err) {
+      setError(err);
+    }
   }
 
   return (
     <View>
       <View style={styles.getStartedContainer}>
-      <Pressable onPress={() => createSolanaWallet()}>
-        <Text
-          style={styles.getStartedText}
-          lightColor="rgba(0,0,0,0.8)"
-          darkColor="rgba(255,255,255,0.8)"
-        >
-          "create solana wallet"
-        </Text>
+        <Pressable onPress={() => createSolanaWallet()}>
+          <Text
+            style={styles.getStartedText}
+            lightColor="rgba(0,0,0,0.8)"
+            darkColor="rgba(255,255,255,0.8)"
+          >
+            "create solana wallet"
+          </Text>
         </Pressable>
 
         <View

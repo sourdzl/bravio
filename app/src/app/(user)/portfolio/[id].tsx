@@ -1,8 +1,8 @@
-import { useAsset, useBalanceList } from "@/api/assets";
-import { imageUSD } from "@/components/AssetListItem";
-import RemoteImage from "@/components/RemoteImage";
-import { useAuth } from "@/providers/AuthProvider";
-import Button from "@components/Button";
+import { useAsset, useBalanceList } from "api/assets";
+import { imageUSD } from "components/AssetListItem";
+import RemoteImage from "components/RemoteImage";
+import { useAuth } from "providers/AuthProvider";
+import Button from "components/Button";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 const actions = ["DEPOSIT", "WITHDRAW"]; // todo: transfer

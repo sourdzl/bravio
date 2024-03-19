@@ -5,6 +5,7 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
 } from "@solana/web3.js";
+import * as bip39 from "bip39";
 
 import sql from "./postgres.js";
 const connection = new Connection("https://api.devnet.solana.com", "confirmed");
@@ -90,14 +91,16 @@ export async function _sweepUSDC(fromWallet: Keypair, toWallet: Keypair) {
 }
 
 export async function generateKeyPair(userId: string) {
-  const keypair = Keypair.generate();
+  const mnemonic = bip39.generateMnemonic();
+  console.log(`generated phrase ${mnemonic.split(" ")}`);
+
+  const seed = bip39.mnemonicToSeedSync(mnemonic, ""); // (mnemonic, password)
+  const keypair = Keypair.fromSeed(seed.slice(0, 32));
 
   // register this keypair for the user for the DB.  Put secretkey somewhere else?
   await sql`
-  INSERT INTO wallets (user_id, public_key, secret_key)
-  VALUES (${userId}, ${keypair.publicKey.toString()}, ${Buffer.from(
-    keypair.secretKey
-  ).toString("base64")})
+  INSERT INTO wallets (user_id, public_key, seedphrase)
+  VALUES (${userId}, ${keypair.publicKey.toString()}, ${mnemonic.split(" ")})
   `;
 
   const wallet = {

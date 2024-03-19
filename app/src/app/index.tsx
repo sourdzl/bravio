@@ -1,5 +1,5 @@
-import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/providers/AuthProvider";
+import { supabase } from "lib/supabase";
+import { useAuth } from "providers/AuthProvider";
 import { Link, Redirect } from "expo-router";
 import React from "react";
 import { ActivityIndicator, View } from "react-native";

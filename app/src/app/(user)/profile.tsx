@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/supabase';
-import { View, Text, Button } from 'react-native';
+import { supabase } from "lib/supabase";
+import { View, Text, Button } from "react-native";
 
 const ProfileScreen = () => {
   return (

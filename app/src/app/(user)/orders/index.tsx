@@ -1,5 +1,5 @@
-import { useMyOrderList } from '@/api/orders';
-import { ActivityIndicator, Text } from 'react-native';
+import { useMyOrderList } from "api/orders";
+import { ActivityIndicator, Text } from "react-native";
 
 export default function OrdersScreen() {
   const { data: orders, isLoading, error } = useMyOrderList();
