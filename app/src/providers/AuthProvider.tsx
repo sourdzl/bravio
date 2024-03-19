@@ -8,23 +8,34 @@ import {
   useEffect,
   useState,
 } from "react";
+import { router } from "expo-router";
 
 type AuthData = {
   session: Session | null;
   profile: any;
   loading: boolean;
+  logout: () => void;
 };
 
 const AuthContext = createContext<AuthData>({
   session: null,
   loading: true,
   profile: null,
+  logout: () => null,
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const logout = () => {
+    // TODO kenl: api request to backend
+    setSession(null);
+    setProfile(null);
+    setLoading(true);
+    router.replace("/login");
+  };
 
   const fetchSession = async () => {
     const {
@@ -54,7 +65,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, loading, profile }}>
+    <AuthContext.Provider value={{ logout, session, loading, profile }}>
       {children}
     </AuthContext.Provider>
   );

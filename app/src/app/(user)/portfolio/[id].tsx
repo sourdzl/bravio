@@ -14,7 +14,7 @@ function viewAsset() {
 const AssetDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
   const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
-  const { session, authLoading } = useAuth();
+  const { session, loading: authLoading } = useAuth();
 
   const { data: asset, error, isLoading } = useAsset(id);
   console.log(`user session: ${JSON.stringify(session)} asset_id: ${id}`);
@@ -22,20 +22,20 @@ const AssetDetailsScreen = () => {
     data: balances,
     _error,
     _isLoading,
-  } = useBalanceList(session.user.id);
+  } = useBalanceList(session!.user.id);
   console.log(`balances: ${JSON.stringify(balances)} id: ${id}`);
 
   const router = useRouter();
 
-  if (isLoading | authLoading) {
+  if (isLoading || authLoading) {
     return <ActivityIndicator />;
   }
 
   if (error || !balances) {
     return (
       <Text>
-        Failed to fetch assets: error {error?.message} balances{" "}
-        {JSON.stringify(balances)}
+        Failed to fetch assets: error {error instanceof Error && error?.message}{" "}
+        balances {JSON.stringify(balances)}
       </Text>
     );
   }
@@ -43,7 +43,7 @@ const AssetDetailsScreen = () => {
   // move this horrible matching logic to helper function
   let assetBalance = null;
   for (const _assetBalance of balances) {
-    if (_assetBalance.assets.id === id) {
+    if (_assetBalance.assets.some((asset) => asset.id === id)) {
       assetBalance = _assetBalance.quantity;
     }
   }

@@ -16,7 +16,7 @@ const index = () => {
     return <Redirect href={"/sign-in"} />;
   }
 
-  return <Redirect href={"/(user)"} />;
+  return <Redirect href={"/(user)/profile"} />;
 
   return (
     <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>

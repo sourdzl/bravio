@@ -3,10 +3,9 @@ import { Redirect, Stack } from "expo-router";
 // import { useAuth } from "providers/AuthProvider";
 
 export default function AuthLayout() {
-  // const { session } = null;//useAuth() || {};
-  const session = null;
+  const { session } = { session: null }; // || useAuth()
   if (session) {
-    return <Redirect href={"/"} />;
+    return <Redirect href={"/(user)/profile"} />;
   }
 
   return <Stack />;

@@ -32,7 +32,7 @@ export const useAsset = (id: number) => {
   });
 };
 
-export const useBalanceList = (user_id: number) => {
+export const useBalanceList = (user_id: string) => {
   return useQuery({
     queryKey: ["balances", user_id],
     queryFn: async () => {
