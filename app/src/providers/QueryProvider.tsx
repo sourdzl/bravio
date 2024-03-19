@@ -1,11 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
-import getEnv from "@/config/env";
+import getEnv from "config/env";
 
 const client = new QueryClient();
 
-const { serverUrl } = getEnv();
+const serverUrl = getEnv();
 
 async function fetchData() {
   try {

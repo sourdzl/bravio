@@ -1,31 +1,29 @@
-import { useAsset, useBalanceList } from '@/api/assets';
-import { imageUSD } from '@/components/AssetListItem';
-import RemoteImage from '@/components/RemoteImage';
-import { useAuth } from '@/providers/AuthProvider';
-import Button from '@components/Button';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
-const actions = ['DEPOSIT', 'WITHDRAW']; // todo: transfer
+import { useAsset, useBalanceList } from "api/assets";
+import { imageUSD } from "components/AssetListItem";
+import RemoteImage from "components/RemoteImage";
+import { useAuth } from "providers/AuthProvider";
+import Button from "components/Button";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+const actions = ["DEPOSIT", "WITHDRAW"]; // todo: transfer
 
 function viewAsset() {
-  console.log('viewAsset');
+  console.log("viewAsset");
 }
 
 const AssetDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
-  const id = parseFloat(typeof idString === 'string' ? idString : idString[0]);
+  const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
   const { session, authLoading } = useAuth();
 
   const { data: asset, error, isLoading } = useAsset(id);
   console.log(`user session: ${JSON.stringify(session)} asset_id: ${id}`);
-  const { data: balances, _error, _isLoading } = useBalanceList(session.user.id);
+  const {
+    data: balances,
+    _error,
+    _isLoading,
+  } = useBalanceList(session.user.id);
   console.log(`balances: ${JSON.stringify(balances)} id: ${id}`);
-
 
   const router = useRouter();
 
@@ -34,12 +32,17 @@ const AssetDetailsScreen = () => {
   }
 
   if (error || !balances) {
-    return <Text>Failed to fetch assets: error {error?.message} balances {JSON.stringify(balances)}</Text>;
+    return (
+      <Text>
+        Failed to fetch assets: error {error?.message} balances{" "}
+        {JSON.stringify(balances)}
+      </Text>
+    );
   }
 
   // move this horrible matching logic to helper function
   let assetBalance = null;
-  for (const _assetBalance of balances){
+  for (const _assetBalance of balances) {
     if (_assetBalance.assets.id === id) {
       assetBalance = _assetBalance.quantity;
     }
@@ -67,37 +70,37 @@ const AssetDetailsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     flex: 0,
     padding: 10,
   },
   image: {
     maxHeight: 80,
-    width: '100%',
+    width: "100%",
     aspectRatio: 1,
   },
   price: {
     fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 'auto',
+    fontWeight: "bold",
+    marginTop: "auto",
   },
 
   sizes: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginVertical: 10,
   },
   button: {
-    backgroundColor: 'gainsboro',
+    backgroundColor: "gainsboro",
     maxWidth: 10,
     aspectRatio: 1,
     borderRadius: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   sizeText: {
     fontSize: 20,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 });
 

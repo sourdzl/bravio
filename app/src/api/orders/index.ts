@@ -1,6 +1,6 @@
-import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/providers/AuthProvider";
-import { InsertTables, UpdateTables } from "@/types";
+import { supabase } from "lib/supabase";
+import { useAuth } from "providers/AuthProvider";
+import { InsertTables, UpdateTables } from "types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import getEnv from "config/env";
 

@@ -1,11 +1,11 @@
-import { supabase } from '@/lib/supabase';
-import { useQuery } from '@tanstack/react-query';
+import { supabase } from "lib/supabase";
+import { useQuery } from "@tanstack/react-query";
 
 export const useAssetList = () => {
   return useQuery({
-    queryKey: ['assets'],
+    queryKey: ["assets"],
     queryFn: async () => {
-      const { data, error } = await supabase.from('assets').select('*');
+      const { data, error } = await supabase.from("assets").select("*");
       if (error) {
         throw new Error(error.message);
       }
@@ -16,12 +16,12 @@ export const useAssetList = () => {
 
 export const useAsset = (id: number) => {
   return useQuery({
-    queryKey: ['assets', id],
+    queryKey: ["assets", id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('assets')
-        .select('*')
-        .eq('id', id)
+        .from("assets")
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (error) {
@@ -32,16 +32,19 @@ export const useAsset = (id: number) => {
   });
 };
 
-
 export const useBalanceList = (user_id: number) => {
   return useQuery({
-    queryKey: ['balances', user_id],
+    queryKey: ["balances", user_id],
     queryFn: async () => {
-      const { data, error } = await supabase.from('balances')
-      .select(`
+      const { data, error } = await supabase
+        .from("balances")
+        .select(
+          `
       quantity,
       assets (id, name, price)
-      `).eq('user_id', user_id);
+      `
+        )
+        .eq("user_id", user_id);
       if (error) {
         throw new Error(error.message);
       }

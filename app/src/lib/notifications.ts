@@ -3,7 +3,7 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { supabase } from "./supabase";
-import { Tables } from "@/types";
+import { Tables } from "types";
 
 export async function registerForPushNotificationsAsync() {
   let token;
