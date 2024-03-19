@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 import { InsertTables, UpdateTables } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import getEnv from "config/env";
 
 export const useMyOrderList = () => {
   const { session } = useAuth();
@@ -102,7 +103,7 @@ export const useCreateSolanaWallet = () => {
 
   return useMutation({
     async mutationFn({ userId }: { userId: string }) {
-      fetch(`${__BACKEND_HOST__}/createSolanaWallet`, {
+      fetch(`${getEnv()}/createSolanaWallet`, {
         method: "POST",
         body: JSON.stringify({ userId }),
         headers: {
