@@ -110,3 +110,13 @@ export async function generateKeyPair(userId: string) {
   console.log(wallet);
   return wallet;
 }
+
+export async function getSolanaWallet(userId: string) {
+  const walletMaybe = await sql`
+  SELECT seedphrase, public_key FROM walleets
+  where user_id = '${userId}'
+  `;
+
+  console.log(walletMaybe);
+  return walletMaybe;
+}

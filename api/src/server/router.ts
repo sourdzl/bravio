@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { generateKeyPair } from "../utils/createSolanaWallet.js";
+import { generateKeyPair, getSolanaWallet } from "../utils/createSolanaWallet.js";
 import { getBalance } from "../utils/postgres.js";
 import { PushNotifier } from "./pushNotifier.js";
 import { trpcT } from "./trpc.js";
@@ -78,5 +78,14 @@ export function createRouter(notifier: PushNotifier) {
         const wallet = await generateKeyPair(user);
         return wallet;
       }),
+
+    getSolanaWallet: publicProcedure
+      .input(z.object({ user: z.string() }))
+      .query(
+        async (opts) => {
+          const {user} = opts.input;
+          const wallet = await getSolanaWallet(user);
+          return wallet;
+        }
   });
 }

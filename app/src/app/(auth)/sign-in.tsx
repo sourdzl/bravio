@@ -1,9 +1,9 @@
-import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
-import React, { useState } from "react";
-import Button from "../../components/Button";
-import Colors from "../../constants/Colors";
 import { Stack } from "expo-router";
 import { supabase } from "lib/supabase";
+import React, { useState } from "react";
+import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import Button from "../../components/Button";
+import Colors from "../../constants/Colors";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
@@ -19,6 +19,7 @@ const SignInScreen = () => {
     });
 
     if (error) Alert.alert(error.message);
+    console.log(`sign in success (error =${error})`);
     setLoading(false);
   }
 

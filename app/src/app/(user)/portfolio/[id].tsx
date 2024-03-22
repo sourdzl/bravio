@@ -1,9 +1,9 @@
 import { useAsset, useBalanceList } from "api/assets";
 import { imageUSD } from "components/AssetListItem";
-import RemoteImage from "components/RemoteImage";
-import { useAuth } from "providers/AuthProvider";
 import Button from "components/Button";
+import RemoteImage from "components/RemoteImage";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useAuth } from "providers/AuthProvider";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 const actions = ["DEPOSIT", "WITHDRAW"]; // todo: transfer
 
@@ -31,7 +31,7 @@ const AssetDetailsScreen = () => {
     return <ActivityIndicator />;
   }
 
-  if (error || !balances) {
+  if (error || _error || !balances) {
     return (
       <Text>
         Failed to fetch assets: error {error instanceof Error && error?.message}{" "}
@@ -43,7 +43,10 @@ const AssetDetailsScreen = () => {
   // move this horrible matching logic to helper function
   let assetBalance = null;
   for (const _assetBalance of balances) {
-    if (_assetBalance.assets.some((asset) => asset.id === id)) {
+    console.log(`_assetBalance is ${JSON.stringify(_assetBalance)}`);
+    // type inferred incorrectly?  shows as array in IDE
+    if (_assetBalance.assets.id === id) {
+    // if (_assetBalance.assets.some((asset) => asset.id === id)) {
       assetBalance = _assetBalance.quantity;
     }
   }

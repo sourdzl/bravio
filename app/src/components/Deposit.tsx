@@ -7,12 +7,13 @@ import { ExternalLink } from "./ExternalLink";
 import { MonoText } from "./StyledText";
 import { Text, View } from "./Themed";
 
-import { useCreateSolanaWallet } from "../api/orders";
+import { useCreateSolanaWallet, useSolanaWallet } from "../api/orders";
 import { useAuth } from "../providers/AuthProvider";
 
 export default function Deposit({ path }: { path: string }) {
   // example of an auth context consumer
   const { session, loading, profile } = useAuth();
+  const { data: _getSolanaWallet } = useSolanaWallet();
   const { mutateAsync: _createSolanaWallet } = useCreateSolanaWallet();
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
@@ -21,9 +22,11 @@ export default function Deposit({ path }: { path: string }) {
     return <Redirect href="/" />;
   }
 
-  async function createSolanaWallet() {
+  async function getOrCreateSolanaWallet() {
     try {
-      await _createSolanaWallet(
+      let wallet = _getSolanaWallet({ userId: session?.user.id});
+      if (!wallet){
+      wallet = await _createSolanaWallet(
         { userId: session?.user.id ?? "" },
         {
           onSuccess: (data) => {
@@ -32,6 +35,7 @@ export default function Deposit({ path }: { path: string }) {
           },
         }
       );
+      }
     } catch (err) {
       setError(err);
     }
@@ -40,7 +44,7 @@ export default function Deposit({ path }: { path: string }) {
   return (
     <View>
       <View style={styles.getStartedContainer}>
-        <Pressable onPress={() => createSolanaWallet()}>
+        <Pressable onPress={() => getOrCreateSolanaWallet()}>
           <Text
             style={styles.getStartedText}
             lightColor="rgba(0,0,0,0.8)"

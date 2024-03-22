@@ -1,8 +1,8 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import getEnv from "config/env";
 import { supabase } from "lib/supabase";
 import { useAuth } from "providers/AuthProvider";
 import { InsertTables, UpdateTables } from "types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import getEnv from "config/env";
 
 export const useMyOrderList = () => {
   const { session } = useAuth();
@@ -98,7 +98,7 @@ export const useUpdateOrder = () => {
 };
 
 export const useCreateSolanaWallet = () => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const { session } = useAuth();
 
   return useMutation({
@@ -113,5 +113,25 @@ export const useCreateSolanaWallet = () => {
       });
     },
     networkMode: "always",
+  });
+};
+
+export const useSolanaWallet = () => {
+  const { session } = useAuth();
+  return useQuery({
+    queryKey: ["solanaWallet", session?.user.id],
+    queryFn: async () => {
+      const response = await fetch(`${getEnv()}/getSolanaWallet`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch Solana wallet data");
+      }
+      return response.json();
+    },
   });
 };
